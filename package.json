@@ -1,9 +1,25 @@
 {
-  "name": "task-manager",
+  "name": "tasksphere-pro",
   "version": "1.0.0",
+  "description": "TaskSphere Pro — Enterprise Task & Workflow Management Platform",
   "type": "module",
-  "engine": {
-    "node": ">=24.12.0",
-    "npm": ">=11.6.2"
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "scripts": {
+    "dev": "concurrently -n \"backend,frontend\" -c \"cyan,green\" \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "build": "npm run build --prefix backend && npm run build --prefix frontend",
+    "build:backend": "npm run build --prefix backend",
+    "build:frontend": "npm run build --prefix frontend",
+    "test": "npm run test --prefix backend",
+    "test:backend": "npm run test --prefix backend",
+    "lint": "npm run lint --prefix frontend",
+    "start": "npm run start --prefix backend"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.6"
   }
 }

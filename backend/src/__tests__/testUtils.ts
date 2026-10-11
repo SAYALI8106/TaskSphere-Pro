@@ -1,12 +1,13 @@
 import { Request, Response, NextFunction } from "express";
+import { AuthRequest } from "../types";
 
-export const mockRequest = (overrides: Partial<Request> = {}): Request => {
+export const mockRequest = (overrides: Partial<AuthRequest> = {}): AuthRequest => {
   return {
     params: {},
     query: {},
     body: {},
     ...overrides
-  } as Request;
+  } as AuthRequest;
 };
 
 export const mockResponse = (): Response => {

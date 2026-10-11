@@ -1,13 +1,18 @@
-import { Priority, Task } from "../types";
+import { Priority, Status, Task, TaskStats } from "../types";
 import api from "./api";
 
-export type NewTaskData = Pick<Task, "name" | "priority">;
-
-export type UpdateTaskData = {
+export type NewTaskData = {
+  title?: string;
   name?: string;
+  description?: string;
+  status?: Status;
   priority?: Priority;
+  dueDate?: string | null;
+  category?: string;
   done?: boolean;
 };
+
+export type UpdateTaskData = Partial<NewTaskData>;
 
 export type PaginatedTasks = {
   page: number;
@@ -17,24 +22,20 @@ export type PaginatedTasks = {
   data: Task[];
 };
 
-export type TaskStats = {
-  total: number;
-  active: number;
-  done: number;
-};
-
 export type GetTasksParams = {
   q?: string; // search
-  priority?: "low" | "medium" | "high";
+  status?: string;
+  priority?: string;
+  category?: string;
+  dueFilter?: string;
   done?: boolean;
-  sortBy?: "priority" | "createdAt" | "updatedAt" | "name";
+  sortBy?: "priority" | "createdAt" | "updatedAt" | "name" | "title" | "dueDate" | "status";
   order?: "asc" | "desc";
   page?: number;
   limit?: number;
 };
 
 export const taskApi = {
-  // GET /api/tasks?filter=&sort=&order=&search=
   getAllTasks: async (params?: GetTasksParams) => {
     const response = await api.get<PaginatedTasks>("/tasks", { params });
     return response.data;
@@ -46,7 +47,17 @@ export const taskApi = {
   },
 
   createTask: async (taskData: NewTaskData) => {
-    const response = await api.post<Task>("/tasks", taskData);
+    const payload = {
+      title: taskData.title || taskData.name,
+      name: taskData.name || taskData.title,
+      description: taskData.description,
+      status: taskData.status || "TODO",
+      priority: taskData.priority || "medium",
+      dueDate: taskData.dueDate,
+      category: taskData.category || "General",
+      done: taskData.done
+    };
+    const response = await api.post<Task>("/tasks", payload);
     return response.data;
   },
 

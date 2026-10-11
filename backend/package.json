@@ -1,17 +1,28 @@
 {
-  "name": "backend",
+  "name": "tasksphere-backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/server.js",
   "scripts": {
     "dev": "nodemon --exec ts-node src/server.ts",
     "build": "tsc",
     "test": "jest",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "prisma:generate": "prisma generate",
+    "prisma:push": "prisma db push",
+    "prisma:seed": "ts-node prisma/seed.ts"
   },
-  "keywords": [],
+  "keywords": [
+    "tasksphere",
+    "task-manager",
+    "productivity",
+    "express",
+    "typescript",
+    "prisma",
+    "postgresql"
+  ],
   "author": "",
   "license": "ISC",
-  "description": "Backend server for Task Manager",
+  "description": "Enterprise-ready Backend API for TaskSphere Pro",
   "dependencies": {
     "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "^7.4.2",

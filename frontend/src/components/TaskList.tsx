@@ -6,21 +6,28 @@ type TaskListProps = {
   onDelete: (taskId: number) => void;
   onToggleDone: (taskId: number) => void;
   updateTask: (task: Task) => void;
+  onViewDetail?: (task: Task) => void;
 };
 
 export const TaskList = ({
   tasks,
   onDelete,
   onToggleDone,
-  updateTask
+  updateTask,
+  onViewDetail
 }: TaskListProps) => {
-  return tasks.map((task) => (
-    <TaskItem
-      key={task.id}
-      task={task}
-      onDelete={onDelete}
-      onToggleDone={onToggleDone}
-      updateTask={updateTask}
-    />
-  ));
+  return (
+    <div className="space-y-3">
+      {tasks.map((task) => (
+        <TaskItem
+          key={task.id}
+          task={task}
+          onDelete={onDelete}
+          onToggleDone={onToggleDone}
+          updateTask={updateTask}
+          onViewDetail={onViewDetail}
+        />
+      ))}
+    </div>
+  );
 };

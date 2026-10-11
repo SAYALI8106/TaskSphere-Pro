@@ -1,15 +1,14 @@
-import { FilterValue } from "../types";
 import Button from "./ui/Button";
 
-type FilterTabsProps = {
-  value: FilterValue;
-  onChange: (value: FilterValue) => void;
-  tabs: { label: string; value: FilterValue }[];
+type FilterTabsProps<T extends string = string> = {
+  value: T;
+  onChange: (value: T) => void;
+  tabs: { label: string; value: T }[];
 };
 
-export const FilterTabs = ({ value, onChange, tabs }: FilterTabsProps) => {
+export const FilterTabs = <T extends string>({ value, onChange, tabs }: FilterTabsProps<T>) => {
   return (
-    <div className="flex gap-3">
+    <div className="flex flex-wrap gap-2">
       {tabs.map((tab) => {
         const isActive = value === tab.value;
 
@@ -19,16 +18,11 @@ export const FilterTabs = ({ value, onChange, tabs }: FilterTabsProps) => {
             variant="tab"
             type="button"
             onClick={() => onChange(tab.value)}
-            className={`p-2 rounded-xl text-sm font-medium transition-colors
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all
               ${
                 isActive
-                  ? "bg-sky-500 text-white"
-                  : "bg-gray-200 text-blue-500 hover:bg-gray-300"
-              }
-              dark:${
-                isActive
-                  ? "bg-sky-600 text-white"
-                  : "bg-gray-700 text-sky-400 hover:bg-gray-600"
+                  ? "bg-sky-500 text-white shadow-xs"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
               }
             `}
           >

@@ -1,64 +1,60 @@
-# Task Manager
+# ⚡ TaskSphere Pro — Frontend Web App
 
-A task management web application built using **React + Vite + TypeScript + Tailwind CSS**.  
-This application helps users manage tasks efficiently with priority handling, filtering, and instant UI feedback.
+Modern, responsive client application for **TaskSphere Pro**, built with **React 19**, **TypeScript**, **Vite**, and **Tailwind CSS**.
 
-## Features
+---
 
-- Add new tasks with priority (**Low / Medium / High**)
-- Mark tasks as **Done / Undone**
-- Delete tasks with confirmation dialog
-- Inline task editing
-- Sort tasks by priority
-- Filter tasks:
-  - Active (default)
-  - Done
-  - All
-- Confetti animation on task completion
-- Toast notifications for user actions
-- Persistent storage using **localStorage**
+## 🚀 Key Features
 
-## Tech Stack
+- **Authentication Flow**: Login, Registration, and Instant One-Click Demo Sign-In.
+- **Real-Time Analytics Dashboard**: Live counters for Total, Completed, In-Progress, High Priority, and Overdue tasks.
+- **Search & Multi-Filter Matrix**: Instant keyword search, status tabs (To Do, In Progress, Completed), priority selector, category filter, due date states, and multi-attribute sorting.
+- **Task Detail Inspector Modal**: View detailed notes, categories, and inline edits.
+- **Dark Mode**: System-aware dark/light theme toggle.
+- **Micro-Animations**: Confetti celebration upon task completion.
+- **Toast Notifications**: Instant feedback on CRUD actions.
 
-- **React**
+---
+
+## 🛠️ Tech Stack
+
+- **React 19**
 - **Vite**
 - **TypeScript**
-- **Tailwind CSS**
-- `react-confetti`
-- `react-toastify`
-- `react-use`
+- **Tailwind CSS (v4)**
+- **Axios** (Cookie session handling)
+- `react-confetti`, `react-toastify`, `react-use`
 
-## Installation & Setup
+---
 
-1. Clone the repository
+## 💻 Local Setup & Development
 
-   ```bash
-   git clone <repository-url>
-   ```
+### 1. Install Dependencies
+```bash
+npm install
+```
 
-2. Navigate to the project directory
+### 2. Configure Environment
+Check `.env`:
+```env
+VITE_API_URL="http://localhost:5001/api"
+VITE_APP_NAME="TaskSphere Pro"
+```
 
-   ```bash
-   cd sayali-gayke/frontend
-   ```
+### 3. Run Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-3. Local setup
+---
 
-   ```bash
-   cp .env.example .env
-   npm install
-   ```
+## 🧪 Build & Linting
 
-   Set the appropriate values for all environment variables in `.env` file.
+```bash
+# Typecheck & build production bundle
+npm run build
 
-4. Run the development server
-
-   ```bash
-   npm run dev
-   ```
-
-5. To manually compile and watch TypeScript errors, run
-
-   ```bash
-   tsc --noEmit --watch
-   ```
+# Run ESLint check
+npm run lint
+```

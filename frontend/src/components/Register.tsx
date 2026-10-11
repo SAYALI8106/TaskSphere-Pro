@@ -26,7 +26,7 @@ const Register = ({ onToggleForm }: RegisterProps) => {
     try {
       await register({ email, password, name });
     } catch (e: unknown) {
-      const defaultError = "Failed to register. Please try again later.";
+      const defaultError = "Failed to create account. Please try again.";
       if (isAxiosError(e)) {
         setError(e.response?.data.message || defaultError);
       } else {
@@ -38,11 +38,19 @@ const Register = ({ onToggleForm }: RegisterProps) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
-      <Card className="w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center dark:text-white">
-          Create Account
-        </h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-sky-950 to-slate-900 px-4 py-8">
+      <Card className="w-full max-w-md p-8 shadow-2xl border border-sky-500/20 backdrop-blur-md bg-white/95 dark:bg-gray-800/95 rounded-2xl">
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-600 text-white text-2xl shadow-lg mb-3">
+            ⚡
+          </div>
+          <h2 className="text-2xl font-black tracking-tight text-gray-900 dark:text-white flex items-center justify-center gap-2">
+            Create Account <span className="text-xs px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-500/20 font-bold">PRO</span>
+          </h2>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            Join TaskSphere and elevate your team productivity
+          </p>
+        </div>
 
         {error ? <ErrorMessage message={error} /> : null}
 
@@ -50,65 +58,77 @@ const Register = ({ onToggleForm }: RegisterProps) => {
           <div>
             <label
               htmlFor="name"
-              className="block text-sm font-medium mb-1 dark:text-gray-300"
+              className="block text-xs font-bold uppercase tracking-wider mb-1 text-gray-700 dark:text-gray-300"
             >
-              Name
+              Full Name
             </label>
             <input
+              id="name"
               name="name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-              placeholder="Your name"
+              className="w-full px-3.5 py-2.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 dark:bg-gray-700 dark:text-white transition-all"
+              placeholder="e.g. Alex Morgan"
             />
           </div>
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium mb-1 dark:text-gray-300"
+              className="block text-xs font-bold uppercase tracking-wider mb-1 text-gray-700 dark:text-gray-300"
             >
-              Email
+              Work Email
             </label>
             <input
+              id="email"
               name="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-              placeholder="you@example.com"
+              className="w-full px-3.5 py-2.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 dark:bg-gray-700 dark:text-white transition-all"
+              placeholder="alex@company.com"
             />
           </div>
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium mb-1 dark:text-gray-300"
+              className="block text-xs font-bold uppercase tracking-wider mb-1 text-gray-700 dark:text-gray-300"
             >
               Password
             </label>
             <input
+              id="password"
               name="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-              placeholder="**********"
+              minLength={6}
+              className="w-full px-3.5 py-2.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 dark:bg-gray-700 dark:text-white transition-all"
+              placeholder="At least 6 characters"
             />
           </div>
 
-          <Button type="submit" disabled={loading} className="w-full">
-            {loading ? "Creating account..." : "Register"}
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full py-2.5 bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-bold rounded-lg shadow-md transition-all active:scale-[0.99]"
+          >
+            {loading ? "Creating your workspace..." : "Create Free Account"}
           </Button>
         </form>
 
-        <p className="mt-4 text-center text-sm text-gray-600 dark:tex-gray-400">
+        <p className="mt-6 text-center text-xs text-gray-600 dark:text-gray-400">
           Already have an account?{" "}
-          <Button onClick={onToggleForm} disabled={!!error}>
-            Login here
-          </Button>
+          <button
+            type="button"
+            onClick={onToggleForm}
+            className="font-bold text-sky-600 dark:text-sky-400 hover:underline cursor-pointer"
+          >
+            Log in here
+          </button>
         </p>
       </Card>
     </div>

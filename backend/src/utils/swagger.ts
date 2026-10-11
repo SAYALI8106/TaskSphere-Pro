@@ -4,14 +4,14 @@ const options: swaggerJsdoc.Options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Task Manager API",
+      title: "TaskSphere Pro API",
       version: "1.0.0",
-      description: "API documentation for Task Manager backend"
+      description: "Production REST API documentation for TaskSphere Pro — Enterprise Task & Productivity Platform"
     },
     servers: [
       {
         url: "http://localhost:5001",
-        description: "Development server"
+        description: "Local development server"
       }
     ]
   },

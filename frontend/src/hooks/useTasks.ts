@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
-import { Task, FilterValue } from "../types";
+import { Task, TaskStats } from "../types";
 import {
   NewTaskData,
   taskApi,
   UpdateTaskData,
-  TaskStats,
   GetTasksParams
 } from "../services/taskApi";
 
@@ -16,7 +15,7 @@ const useTasks = () => {
 
   // Backend query state
   const [query, setQuery] = useState<GetTasksParams>({
-    done: false // default = active tasks
+    status: undefined // default = all or filtered by UI
   });
 
   // Fetch tasks
@@ -88,6 +87,68 @@ const useTasks = () => {
     [fetchTasks, fetchStats]
   );
 
+  const setStatusFilter = (status: string) => {
+    setQuery((q) => {
+      if (status === "all") {
+        const { status: _, done: __, ...rest } = q;
+        return rest;
+      }
+      return { ...q, status };
+    });
+  };
+
+  const setPriorityFilter = (priority: string) => {
+    setQuery((q) => {
+      if (priority === "all") {
+        const { priority: _, ...rest } = q;
+        return rest;
+      }
+      return { ...q, priority };
+    });
+  };
+
+  const setCategoryFilter = (category: string) => {
+    setQuery((q) => {
+      if (category === "all") {
+        const { category: _, ...rest } = q;
+        return rest;
+      }
+      return { ...q, category };
+    });
+  };
+
+  const setDueFilter = (dueFilter: string) => {
+    setQuery((q) => {
+      if (dueFilter === "all") {
+        const { dueFilter: _, ...rest } = q;
+        return rest;
+      }
+      return { ...q, dueFilter };
+    });
+  };
+
+  const setSearch = (search: string) => {
+    setQuery((q) => ({
+      ...q,
+      q: search.trim() || undefined
+    }));
+  };
+
+  const setSort = (
+    sortBy: GetTasksParams["sortBy"],
+    order: GetTasksParams["order"]
+  ) => {
+    setQuery((q) => ({
+      ...q,
+      sortBy,
+      order
+    }));
+  };
+
+  const resetFilters = () => {
+    setQuery({});
+  };
+
   return {
     tasks,
     stats,
@@ -97,33 +158,14 @@ const useTasks = () => {
     updateTask,
     deleteTask,
     toggleTask,
-
-    // UI → backend mapping (STRICTLY TYPED)
-    setFilter: (filter: FilterValue) =>
-      setQuery((q) => {
-        if (filter === "all") {
-          const { done, ...rest } = q;
-          return rest;
-        }
-        return { ...q, done: filter === "done" };
-      }),
-
-    setSearch: (search: string) =>
-      setQuery((q) => ({
-        ...q,
-        q: search.trim() || undefined
-      })),
-
-    setSort: (
-      sortBy: GetTasksParams["sortBy"],
-      order: GetTasksParams["order"]
-    ) =>
-      setQuery((q) => ({
-        ...q,
-        sortBy,
-        order
-      })),
-
+    setStatusFilter,
+    setPriorityFilter,
+    setCategoryFilter,
+    setDueFilter,
+    setSearch,
+    setSort,
+    resetFilters,
+    setFilter: setStatusFilter, // alias for legacy support
     refetch: fetchTasks
   };
 };

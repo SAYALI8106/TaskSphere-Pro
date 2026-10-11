@@ -1,6 +1,6 @@
+import "dotenv/config";
 import express, { Request, Response } from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth";
 import tasksRouter from "./routes/tasks";
@@ -11,18 +11,12 @@ import { swaggerSpec } from "./utils/swagger";
 import { StatusCodes } from "http-status-codes";
 import prisma from "./config/prisma";
 import { fetchEnvVar } from "./utils";
-
-dotenv.config();
+import { initDatabase, isUsingPostgres } from "./config/dbConnection";
 
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-const ensureEnvVarIsSet = (varName: string) => {
-  if (!process.env[varName]) {
-    throw new Error(`Missing ${varName} environment variable`);
-  }
-};
-
+// Validate core required environment variables
 for (const envVar of [
   "FRONTEND_APP_URL",
   "NODE_ENV",
@@ -31,9 +25,10 @@ for (const envVar of [
 ]) {
   fetchEnvVar(envVar);
 }
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_APP_URL,
+    origin: process.env.FRONTEND_APP_URL || "http://localhost:5173",
     credentials: true
   })
 );
@@ -42,29 +37,39 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(requestLogger);
 
+// Health check endpoint
 app.get("/api/health", async (req: Request, res: Response) => {
   try {
-    await prisma.$executeRaw`select 1`;
+    const isPg = isUsingPostgres();
+    if (isPg) {
+      await prisma.$executeRaw`SELECT 1`;
+    }
 
     res.json({
       status: "ok",
-      database: "connected",
+      database: isPg ? "connected (PostgreSQL)" : "connected (Embedded Local Engine)",
+      engine: isPg ? "PostgreSQL via Prisma ORM" : "TaskSphere Persistent Local Store",
       timestamp: new Date().toISOString(),
       uptime: process.uptime()
     });
-  } catch (e) {
+  } catch (e: any) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       status: "error",
       database: "disconnected",
+      message: e.message,
       timestamp: new Date().toISOString()
     });
   }
 });
 
+// Swagger Documentation
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Application Routes
 app.use("/api/auth", authRouter);
 app.use("/api/tasks", tasksRouter);
 
+// 404 Handler
 app.use((req: Request, res: Response) => {
   res.status(StatusCodes.NOT_FOUND).json({
     message: "Route not found",
@@ -72,7 +77,13 @@ app.use((req: Request, res: Response) => {
   });
 });
 
+// Error handling middleware
 app.use(errorHandler);
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+
+app.listen(PORT, async () => {
+  console.log(`🚀 TaskSphere Pro Server running on port ${PORT}`);
+  console.log(`📚 API Documentation: http://localhost:${PORT}/api/docs`);
+  await initDatabase();
 });
+
+export default app;
